@@ -69,8 +69,9 @@ def is_length(expected_len: int) -> Predicate[Sized]:
     """
     return _IsLength(expected_len)
 
-
-is_empty: Predicate[Sized] = _IsLength(0)
+def is_empty(val: Sized) -> bool:
+    """Checks if the element is empty."""
+    return _IsLength(0)(val)
 
 
 def is_blank_str(val: str) -> bool:
@@ -99,9 +100,9 @@ class _Neg(Predicate[T]):
 
 
 def neg(predicate: Predicate[T]) -> Predicate[T]:
-    """Negate the return of the provided predicate.
+    """Create a new predicate that is the negation of the provided.
 
-    If the predicate would yield True, the negated one would yield False, and vice-versa.
+    If the predicate would yield True, the negated one would yield False, and vice versa.
 
     Examples:
         >>> assert Maybe.of("maypy").filter(is_blank_str).is_empty()
@@ -187,7 +188,6 @@ def one_of(options: Container[T]) -> Predicate[T]:
 
     Examples:
         >>> option = one_of(["foo", "bar"])
-
         >>> assert option("foo")
         >>> assert option("bar")
         >>> assert not option("maypy")

@@ -3,11 +3,11 @@ from typing import Any, ClassVar, Sized
 
 import pytest
 
-from maypy.predicate import (
+from maypy.predicates import (
     contains,
     equals,
-    is_empty,
     is_blank_str,
+    is_empty,
     is_falsy,
     is_length,
     is_truthy,
