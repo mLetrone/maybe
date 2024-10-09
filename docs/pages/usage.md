@@ -175,40 +175,40 @@ class Movie:
     oscars: list[str] | None = field(default=None)
 ```
 
-without _Maybe_:
+=== "without _Maybe_"
+    
+    ```python
+    from typing import Callable
+    
+    def interval_checker(start_year: int, end_year: int) -> Callable[[Movie], bool]:
+        def is_in_range(movie: Movie | None) -> bool:
+            if movie is not None:
+                return start_year <= movie.year <= end_year
+            return False
+    
+        return is_in_range
+    
+    
+    movie = Movie("Luc Besson", "Taxi", 1998, ["comedy"])
+    
+    assert interval_checker(1990, 2005)(movie)
+    assert not interval_checker(2000, 2020)(movie)
+    assert not interval_checker(2000, 2020)(None)
+    ```
 
-```python
-from maypy import Predicate
-
-
-def interval_checker(start_year: int, end_year: int) -> Predicate[Movie]:
-    def is_in_range(movie: Movie | None) -> bool:
-        if movie is not None:
-            return start_year <= movie.year <= end_year
-        return False
-
-    return is_in_range
-
-
-movie = Movie("Luc Besson", "Taxi", 1998, ["comedy"])
-
-assert interval_checker(1990, 2005)(movie)
-assert not interval_checker(2000, 2020)(movie)
-assert not interval_checker(2000, 2020)(None)
-```
-
-with _Maybe_:
-```python
-
-assert Maybe.of(movie).filter(lambda film: 1990 <= film.year <= 2005).is_present()
-```
+=== "with _Maybe_"
+    ```python
+    from maypy import Maybe
+    
+    assert Maybe.of(movie).filter(lambda film: 1990 <= film.year <= 2005).is_present()
+    ```
 
 ### Mapping
 
 With a similar syntax, we can transform the value inside _Maybe_ using 
 [`map`:octicons-link-external-16:](maybe.md#maypy._maybe.Maybe.map).
 
-Reusing a last example, getting the number of oscars rewarding the movie.
+Reusing last example, getting the number of oscars rewarding the movie.
 
 ```python
 movie = Movie("Luc Besson", "Taxi", 1998, ["comedy"])
